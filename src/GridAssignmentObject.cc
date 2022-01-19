@@ -10,7 +10,7 @@ using std::vector;
 using std::queue;
 using std::min;
 using std::max;
-using std::floor;
+//using std::floor;
 
 /** The present implementation of GridAssignmentObject is judged to be
  *  sufficiently fast to meet the needs of initial assignment of
@@ -56,9 +56,9 @@ GridAssignmentObject::GridAssignmentObject(const vector<MC_Vector>& centers)
 
    double x = _centers.size()/centersPerCell/(lx*ly*lz);
    x = pow(x, 1.0/3.0);
-   _nx = max(1., floor(x*lx));
-   _ny = max(1., floor(x*ly));
-   _nz = max(1., floor(x*lz));
+   _nx = max(1., std::floor(x*lx));
+   _ny = max(1., std::floor(x*ly));
+   _nz = max(1., std::floor(x*lz));
    _dx = lx/_nx;
    _dy = ly/_ny;
    _dz = lz/_nz;

@@ -13,7 +13,7 @@
 #include "macros.hh" // current location of openMP wrappers.
 #include "cudaUtils.hh"
 
-using std::ceil;
+//using std::ceil;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Construct a MonteCarlo object.
@@ -84,7 +84,7 @@ MonteCarlo::MonteCarlo(const Parameters& params)
     {
         const MaterialParameters& mp = matIter->second;
         double nuBar = params.crossSectionParams.at(mp.fissionCrossSection).nuBar;
-        size_t nb = ceil( nuBar );
+        size_t nb = std::ceil( nuBar );
         size_t test_size = nb*( batch_size );
 
         if ( test_size > vector_size )

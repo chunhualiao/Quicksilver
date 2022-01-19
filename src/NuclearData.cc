@@ -4,8 +4,8 @@
 #include "DeclareMacro.hh"
 #include "qs_assert.hh"
 
-using std::log10;
-using std::pow;
+//using std::log10;
+//using std::pow;
 
 // Set the cross section values and reaction type
 // Cross sections are scaled to produce the supplied reactionCrossSection at 1MeV.
@@ -21,7 +21,7 @@ NuclearDataReaction::NuclearDataReaction(
    for (int ii=0; ii<nGroups; ++ii)
    {
       double energy = (energies[ii] + energies[ii+1]) / 2.0;
-      _crossSection[ii] = pow( 10, polynomial(log10( energy)));
+      _crossSection[ii] = std::pow( 10, polynomial(std::log10( energy)));
    }
 
    // Find the normalization value for the polynomial.  This is the

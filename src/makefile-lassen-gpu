@@ -94,24 +94,27 @@ SHELL = /bin/bash
 # Set your desired C++ compiler and any necessary flags.
 # The interpretation of each of these four variables is described above.
 # A number of examples for machines we regularly run on are given below.
-CXX = 
-CXXFLAGS =
-CPPFLAGS = 
-LDFLAGS =
+# Settings on lassen
+#
+#CXX = clang++
+#OPENMP_FLAGS = -DHAVE_OPENMP -DHAVE_OPENMP_TARGET -O2 -g -fopenmp -fopenmp-targets=nvptx64
+#CXXFLAGS = $(OPENMP_FLAGS)
+#CPPFLAGS = $(OPENMP_FLAGS) 
+#LDFLAGS = $(OPENMP_FLAGS) -lm
 
 ###############################################################################
 # Very simple GCC build with OpenMP but without MPI.  
 # This works on a Macbook (if gcc is installed)
 ###############################################################################
 #
-OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp 
-OPENMP_LDFLAGS = -fopenmp
-OPTFLAGS = -g -O2
-#
-CXX=g++
-CXXFLAGS = -std=c++11  $(OPTFLAGS) -Wpedantic
-CPPFLAGS = $(OPENMP_FLAGS)
-LDFLAGS = $(OPENMP_LDFLAGS) 
+#OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp 
+#OPENMP_LDFLAGS = -fopenmp
+#OPTFLAGS = -g -O2
+##
+#CXX=g++
+#CXXFLAGS = -std=c++11  $(OPTFLAGS) -Wpedantic
+#CPPFLAGS = $(OPENMP_FLAGS)
+#LDFLAGS = $(OPENMP_LDFLAGS) 
 
 
 ###############################################################################
@@ -141,29 +144,35 @@ LDFLAGS = $(OPENMP_LDFLAGS)
 
 
 ###############################################################################
-# OpenMP 4.5 on LLNL CORAL EA nodes
+# OpenMP 4.5 on LLNL CORAL EA nodes, such as lassen
 ###############################################################################
 ## Choose one Cuda path
 ##CUDA_PATH = /usr/local/cuda-8.0
-#CUDA_PATH = /usr/tcetmp/packages/cuda-9.0.176
+CUDA_PATH = /usr/tce/packages/cuda/cuda-10.1.243
+#/usr/tcetmp/packages/cuda-9.0.176
+# /usr/tce/packages/cuda/cuda-10.1.243
 
 ## Choose one of these compilers
+# pointing to /usr/tce/packages/clang/clang-ibm-12.0.1/bin/clang++-gpu
 #CXX=mpiclang++-gpu
-#CXX=mpixlC-gpu
+#CXX=mpixlC-gpu  # this works
+
+CXX=clang++
 
 ## Uncomment next line to run on CPU only (disable GPUs)
 #OPENMP_OFFLOAD_FLAGS = -DUSE_OPENMP_NO_GPU 
 
-#OPENMP_OFFLOAD_FLAGS += -DHAVE_OPENMP_TARGET -mcpu=power8  
-#OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp ${OPENMP_OFFLOAD_FLAGS}
-#OPTFLAGS = -O2
+OPENMP_OFFLOAD_FLAGS += -DHAVE_OPENMP_TARGET -mcpu=power9  
+OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp ${OPENMP_OFFLOAD_FLAGS}
+OPTFLAGS = -O2
 
-#CUDA_FLAGS = -I${CUDA_PATH}/include/
-#CUDA_LDFLAGS = -L${CUDA_PATH}/lib64/ -lcuda -lcudart
+CUDA_FLAGS = -I${CUDA_PATH}/include/
+CUDA_LDFLAGS = -L${CUDA_PATH}/lib64/ -lcuda -lcudart
 
-#CXXFLAGS = -std=c++11 $(OPTFLAGS)
+CXXFLAGS = -std=c++11 $(OPTFLAGS)
 #CPPFLAGS = -DHAVE_MPI $(OPENMP_FLAGS) $(CUDA_FLAGS) 
-#LDFLAGS  = $(CUDA_LDFLAGS)
+CPPFLAGS = $(OPENMP_FLAGS) $(CUDA_FLAGS) 
+LDFLAGS  = $(CUDA_LDFLAGS) -fopenmp
 
 
 ###############################################################################
@@ -189,8 +198,6 @@ LDFLAGS = $(OPENMP_LDFLAGS)
 #CPPFLAGS = -x cu -dc -DHAVE_MPI -DHAVE_ASYNC_MPI
 #LDFLAGS  = $(CUDA_LDFLAGS) 
 ##LDFLAGS += ${CUDA_PATH}/lib64/libnvToolsExt.so
-
-
 
 
 ###############################################################################
@@ -258,7 +265,7 @@ LDFLAGS = $(OPENMP_LDFLAGS)
 GITVERS := "$(shell git log -n 1 |  grep Date   | awk -F " " '{print $$6 "-" $$3 "-" $$4 "-" $$5}')"
 GITHASH := "$(shell git log -n 1 |  grep commit | awk -F " " '{print $$2}')"
 
-Quicksilver_EXE=qs
+Quicksilver_EXE=qs.gpu
 
 # clear all suffixes
 .SUFFIXES:
@@ -324,7 +331,7 @@ git_vers.hh:
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c $< -o $@
 
 ${Quicksilver_EXE}: git_hash.hh git_vers.hh ${CC_OBJECTS}  
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o ${Quicksilver_EXE} ${CC_OBJECTS}
+	${CXX} ${CXXFLAGS} ${LDFLAGS} ${CC_OBJECTS} -o ${Quicksilver_EXE}
 
 clean:
 	rm -f *.o git_hash.hh git_vers.hh .depend load.map *.core *.optrpt

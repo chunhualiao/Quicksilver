@@ -25,7 +25,7 @@ using std::endl;
 using std::vector;
 using std::make_pair;
 using std::map;
-using std::abs;
+//using std::abs;
 using std::string;
 
 namespace
@@ -348,7 +348,7 @@ double cellVolume(const MC_Facet_Adjacency_Cell& cell,
       MC_Vector bb = node[facetCorner[1]] - cellCenter;
       MC_Vector cc = node[facetCorner[2]] - cellCenter;
 
-      volume += abs(aa.Dot(bb.Cross(cc)));
+      volume += std::abs(aa.Dot(bb.Cross(cc)));
    }
    volume /= 6.0;
    return volume;
