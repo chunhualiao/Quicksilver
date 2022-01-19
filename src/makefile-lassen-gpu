@@ -157,12 +157,12 @@ CUDA_PATH = /usr/tce/packages/cuda/cuda-10.1.243
 #CXX=mpiclang++-gpu
 #CXX=mpixlC-gpu  # this works
 
-CXX=clang++
+#CXX=clang++
+CXX=clang++-gpu
 
+OPENMP_OFFLOAD_FLAGS = -DHAVE_OPENMP_TARGET -mcpu=power9  
 ## Uncomment next line to run on CPU only (disable GPUs)
 #OPENMP_OFFLOAD_FLAGS = -DUSE_OPENMP_NO_GPU 
-
-OPENMP_OFFLOAD_FLAGS += -DHAVE_OPENMP_TARGET -mcpu=power9  
 OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp ${OPENMP_OFFLOAD_FLAGS}
 OPTFLAGS = -O2
 
