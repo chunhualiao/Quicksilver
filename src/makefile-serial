@@ -102,9 +102,12 @@ LDFLAGS =
 ###############################################################################
 # Very simple GCC OR Clang build without OpenMP , without MPI.  
 ###############################################################################
-OPTFLAGS = -g -O2
+#OPTFLAGS = -g -O2
+# using gprof
+OPTFLAGS = -g -O0 -pg
 #
-CXX=clang++
+#CXX=clang++
+CXX=g++
 CXXFLAGS = -std=c++11  $(OPTFLAGS) -Wpedantic
 CPPFLAGS = 
 # still link with some OMP runtime library
