@@ -157,10 +157,11 @@ CUDA_PATH = /usr/tce/packages/cuda/cuda-10.1.243
 #CXX=mpiclang++-gpu
 #CXX=mpixlC-gpu  # this works
 
-#CXX=clang++
-CXX=clang++-gpu
+# using the version of ML-LLVM
+CXX=/g/g17/liao6/workspace-wsa/opt/llvm-master-offload/bin/clang++
+#CXX=clang++-gpu
 
-OPENMP_OFFLOAD_FLAGS = -DHAVE_OPENMP_TARGET -mcpu=power9  
+OPENMP_OFFLOAD_FLAGS = -DHAVE_OPENMP_TARGET -mcpu=power9 -fopenmp-targets=nvptx64-nvidia-cuda 
 ## Uncomment next line to run on CPU only (disable GPUs)
 #OPENMP_OFFLOAD_FLAGS = -DUSE_OPENMP_NO_GPU 
 OPENMP_FLAGS = -DHAVE_OPENMP -fopenmp ${OPENMP_OFFLOAD_FLAGS}
@@ -172,7 +173,7 @@ CUDA_LDFLAGS = -L${CUDA_PATH}/lib64/ -lcuda -lcudart
 CXXFLAGS = -std=c++11 $(OPTFLAGS)
 #CPPFLAGS = -DHAVE_MPI $(OPENMP_FLAGS) $(CUDA_FLAGS) 
 CPPFLAGS = $(OPENMP_FLAGS) $(CUDA_FLAGS) 
-LDFLAGS  = $(CUDA_LDFLAGS) -fopenmp
+LDFLAGS  = $(CUDA_LDFLAGS) -fopenmp -fopenmp-targets=nvptx64-nvidia-cuda
 
 
 ###############################################################################

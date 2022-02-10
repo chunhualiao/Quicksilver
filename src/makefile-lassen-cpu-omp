@@ -157,7 +157,7 @@ CUDA_PATH = /usr/tce/packages/cuda/cuda-10.1.243
 #CXX=mpiclang++-gpu
 #CXX=mpixlC-gpu  # this works
 
-CXX=clang++
+CXX=/g/g17/liao6/workspace-wsa/opt/llvm-master-offload/bin/clang++
 
 ## Uncomment next line to run on CPU only (disable GPUs)
 #OPENMP_OFFLOAD_FLAGS = -DUSE_OPENMP_NO_GPU 
@@ -265,7 +265,7 @@ LDFLAGS  = $(CUDA_LDFLAGS) -fopenmp
 GITVERS := "$(shell git log -n 1 |  grep Date   | awk -F " " '{print $$6 "-" $$3 "-" $$4 "-" $$5}')"
 GITHASH := "$(shell git log -n 1 |  grep commit | awk -F " " '{print $$2}')"
 
-Quicksilver_EXE=qs.cpu.omp
+Quicksilver_EXE=./bin/qs.cpu.omp
 
 # clear all suffixes
 .SUFFIXES:
